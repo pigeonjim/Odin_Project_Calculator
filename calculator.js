@@ -20,6 +20,7 @@ function addTheButtonsNScreen(){
     const screenDiv = document.createElement("div");
     const buttonDiv= document.createElement("div");
     screenDiv.classList = "screenDiv";
+    screenDiv.textContent = "Testing 1 2 3";
     buttonDiv.classList = "buttonDiv";
     calcDiv.appendChild(screenDiv); 
     calcDiv.appendChild(buttonDiv);

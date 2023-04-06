@@ -1,3 +1,7 @@
+@font-face {
+    font-family: 'digital-clock-font';
+    src: url(Seven\ Segment.ttf);
+  }
 .body{
     margin: 0px;
 }
@@ -50,6 +54,11 @@
     min-width: 150px;
     max-width: 250px;
     background-color: black;
+    font-family: 'digital-clock-font', sans-serif;
+    color: #cd61e5;
+    text-align: center;
+    padding: 2%;
+    font-size: large;    
 }
 .buttonDiv{
     display: grid;
