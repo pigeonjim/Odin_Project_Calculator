@@ -77,9 +77,15 @@
     border-width: 2px;
     border-style: solid;  
     border-radius: 0%;
-    font-size: larger;
-    font-family: 'Courier New', Courier, monospace;
 }   
 .longerButton:hover{
     background-color: darkolivegreen;
+}
+.opButtons{
+    font-size: larger;
+    font-family: 'Courier New', Courier, monospace;
+}
+.topButtons{
+    font-size: small;
+    font-family: sans-serif;
 }

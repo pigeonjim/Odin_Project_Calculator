@@ -27,19 +27,25 @@ function addTheButtonsNScreen(){
     for(let i = 1; i < 3; i ++){
         const longerButton1 = document.createElement("button");
         const longerButton2 = document.createElement("button");
-        longerButton1.classList = "buttons longerButton"
+        longerButton1.classList = "buttons longerButton topButtons"
         longerButton1.style.setProperty("grid-column","1 / 3");
-        longerButton2.classList = "buttons longerButton"
+        longerButton2.classList = "buttons longerButton topButtons"
         longerButton2.style.setProperty("grid-column","4 / 6");
         buttonDiv.appendChild(longerButton1);
         buttonDiv.appendChild(longerButton2);
+        if(i == 1){
+            longerButton1.textContent = "Clear";
+            longerButton2.textContent = "On"
+        } else{
+            longerButton1.textContent = "π";
+            longerButton2.textContent = "off"
+        }
     }  
     let count = 9
     for(let i = 1; i < 21;i++){     
-        let theButton = document.createElement("button");
-        
+        let theButton = document.createElement("button");        
         if(i % 5 == 0 || (i + 1) % 5 == 0) {
-            theButton.classList = "buttons longerButton";
+            theButton.classList = "buttons longerButton opButtons";
             operatorButtons(i, theButton);
         } else{
             theButton.classList = "buttons";
@@ -54,8 +60,7 @@ function addTheButtonsNScreen(){
                         theButton.textContent = "."
                         break;
                 }
-            }
-            
+            }            
             count--;
         }
         buttonDiv.appendChild(theButton); }
@@ -78,7 +83,7 @@ function operatorButtons(aNumber, aButton){
             aButton.textContent= "-";
             break;
         case 15:
-            aButton.textContent = "π";
+            aButton.textContent = "MOD";
             break; 
         case 19:
             aButton.textContent = "+";
