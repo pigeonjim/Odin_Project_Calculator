@@ -1,4 +1,4 @@
-window.addEventListener("load", (event) => onLoad())
+    window.addEventListener("load", (event) => onLoad())
 
 function onLoad(){
     document.body.classList = "body";
@@ -34,14 +34,58 @@ function addTheButtonsNScreen(){
         buttonDiv.appendChild(longerButton1);
         buttonDiv.appendChild(longerButton2);
     }  
-    for(let i = 1; i < 21;i++){
-     
+    let count = 9
+    for(let i = 1; i < 21;i++){     
         let theButton = document.createElement("button");
-        theButton.classList = "buttons";
+        
         if(i % 5 == 0 || (i + 1) % 5 == 0) {
             theButton.classList = "buttons longerButton";
+            operatorButtons(i, theButton);
+        } else{
+            theButton.classList = "buttons";
+            if(count >= 0){
+                theButton.textContent = count.toString();
+            } else {
+                switch (count){
+                    case -1:
+                        theButton.textContent = "="
+                        break;
+                    case -2:
+                        theButton.textContent = "."
+                        break;
+                }
+            }
+            
+            count--;
         }
-        theButton.textContent = i;
         buttonDiv.appendChild(theButton); }
-
     }
+function operatorButtons(aNumber, aButton){
+    switch(aNumber){
+        case 4:
+            aButton.textContent = "÷";
+            break;
+        case 5:
+            aButton.textContent = "√";
+            break;
+        case 9:
+            aButton.textContent = "X";
+            break;      
+        case 10:
+            aButton.textContent= "X^2";
+            break;
+        case 14:
+            aButton.textContent= "-";
+            break;
+        case 15:
+            aButton.textContent = "π";
+            break; 
+        case 19:
+            aButton.textContent = "+";
+            break;
+        case 20:
+            aButton.textContent = "1/X";
+            break; 
+}
+
+}
