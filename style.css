@@ -1,0 +1,36 @@
+.body{
+    margin: 0px;
+}
+
+.mainDiv{
+    display: flex;
+    flex-direction: column;
+    height: 95vh;
+    width: 100vw;
+    gap: 5vh;
+    margin: 0px;
+    background-color: #3c463f98;
+    align-items: center;
+    padding-top: 5vh;
+}
+
+.header{ 
+    height: 5vh;
+    width: 15vw;
+    text-align: center;    
+}
+
+.calcBase{
+    margin: 0px;
+    background-color: #CFCFCF;
+    border-width: 2px;
+    border-style: solid;
+    border-color: black;
+    height: 50vh;
+    width: 20vw;
+    padding: 5vh;
+    justify-self: center;
+    border-radius: 3%;
+    box-shadow: 10px 10px #4d505786;
+    
+}

@@ -1,0 +1,1 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QCalculator <script src=\"calculator.js\" defer></script> <link rel=\"stylesheet\" href=\"style.css\"> </head> <body> </body> </html>\\E$"}
