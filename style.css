@@ -44,7 +44,7 @@
     flex-direction: column; 
     justify-content: flex-start;  
     align-content: center;
-    row-gap: 5vh;
+    row-gap: 2vh;
 }
 .screenDiv{
     border-width: 5px;
@@ -53,20 +53,22 @@
     min-height: 25px;
     min-width: 150px;
     max-width: 250px;
-    background-color: black;
+    background-color: #000000;
     font-family: 'digital-clock-font', sans-serif;
     color: #cd61e5;
     text-align: center;
     padding: 2%;
     font-size: large;    
+    letter-spacing: 2px;
+    margin: 0px;
 }
 .buttonDiv{
     display: grid;
     grid-template-columns:  repeat(3,minmax(20px, 30px)) 2fr 2fr ;
     grid-template-rows: 20px 20px minmax(20px, auto);
     grid-row: auto;
-    row-gap: 1vh;
-    column-gap: 1vh;
+    row-gap: 5px;
+    column-gap: 5px;
 }
 .buttons{
     background-color: #4d505786;
@@ -97,4 +99,10 @@
 .topButtons{
     font-size: small;
     font-family: sans-serif;
+}
+.onOrAff{
+    margin: 0px;
+    background-color: #5D865F;
+    min-height: 5px;
+    width: 100px
 }
