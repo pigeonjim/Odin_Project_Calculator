@@ -18,11 +18,12 @@ function onLoad(){
     let onOrAff = document.createElement("div");
     onOrAff.classList = "onOrAff";
     calcDiv.appendChild(onOrAff);
-    let theDisplay= new Display(screenDiv);
-    let theButtons = addTheButtons(theDisplay);
+    let theDisplay = new Display(screenDiv);
+    let operate = new TheOperations();
+    let theButtons = addTheButtons(operate, theDisplay);
 }
 
-function addTheButtons(aScreen){
+function addTheButtons(operate, aDisplay){
     const calcDiv = document.querySelector(".calcBase")
     const buttonDiv= document.createElement("div");
     buttonDiv.classList = "buttonDiv";
@@ -40,17 +41,20 @@ function addTheButtons(aScreen){
         if(i == 1){
             longerButton1.textContent = "Clear";
             buttonMap.set("Clear", longerButton1);
-            longerButton1.addEventListener("click", (event) => aScreen.clearInput())
+            longerButton1.addEventListener("click", function(){
+                aDisplay.clearInput();
+                operate.clear();
+             })
             longerButton2.textContent = "On";
-            longerButton2.addEventListener("click", (event) => aScreen.turnOn())
+            longerButton2.addEventListener("click", (event) => aDisplay.turnOn())
             buttonMap.set("On", longerButton2);
         } else{
             longerButton1.textContent = "π";
             buttonMap.set("Pi", longerButton1);
-            longerButton1.addEventListener("click", (event) => aScreen.addInput("π"));
+            longerButton1.addEventListener("click", (event) => aDisplay.addInput("π"));
             longerButton2.textContent = "off"
             buttonMap.set("Off", longerButton2);
-            longerButton2.addEventListener("click", (event) => aScreen.turnOff());
+            longerButton2.addEventListener("click", (event) => aDisplay.turnOff());
         }
     }  
     let count = 9
@@ -59,16 +63,32 @@ function addTheButtons(aScreen){
         if(i % 5 == 0 || (i + 1) % 5 == 0) {
             theButton.classList = "buttons longerButton opButtons";
             operatorButtons(i, theButton);
+            theButton.addEventListener("click", function(){
+                
+                if(!(operate.lastEntryWasOp())){
+                    operate.onKeyPress(theButton.textContent);
+                    aDisplay.addInput(theButton.textContent);   
+                } else{
+                    window.alert("You can not use two operators in a row");
+                }
+            })
             buttonMap.set(`OpB${i}`, theButton);
-        } else{
+             } else{
             theButton.classList = "buttons";
             if(count >= 0){
                 theButton.textContent = count.toString();
-                
+                theButton.addEventListener("click", function(){
+                    operate.onKeyPress(theButton.textContent);
+                    aDisplay.addInput(theButton.textContent);
+                })
             } else {
                 switch (count){
                     case -1:
                         theButton.textContent = "="
+                        theButton.addEventListener("click", function(){
+                            let theAnswer = operate.equals();
+                            aDisplay.answer(theAnswer);
+                        })
                         break;
                     case -2:
                         theButton.textContent = "."
@@ -78,7 +98,6 @@ function addTheButtons(aScreen){
             buttonMap.set(theButton.textContent, theButton);        
             count--;
         }
-        theButton.addEventListener("click", (event) => aScreen.addInput(theButton.textContent));
         buttonDiv.appendChild(theButton); }
         return buttonMap;
     }
@@ -108,24 +127,51 @@ function operatorButtons(aNumber, aButton){
         case 20:
             aButton.textContent = "1/X";
             break; 
-}
-
-}
-
-class TheOperations{
-    #numberOne; //or array of string from buttons
-    #numberTwo;
-    #operator;
-    
-    constructor(no1, no2, operator){
-        this.#numberOne = no1;
-        this.#numberTwo = no2;
-        this.#operator = operator;
-        this.whatOp();
     }
 
-    whatOp(){
-        switch (this.#operator){
+}
+class TheOperations{
+    numberTwo;
+    operator;
+    result;
+    previousEntry;
+    
+    constructor(){
+        this.clear();
+    }
+    hasAnOperator(){
+        return this.operator.length > 0;
+    }
+    hasFirstNumber(){
+        return this.result.length > 0;
+    }
+    lastEntryWasOp(){
+        return isNaN(parseFloat(this.previousEntry));
+    }
+    onKeyPress(input){
+        if(isNaN(parseFloat(input))){
+            if (!(this.hasFirstNumber())){
+                window.alert("Please enter a number first");
+            } else if(!(this.hasAnOperator())){
+                this.operator += input;
+            }else{
+                console.log(this.result)
+                this.calc();
+                console.log("after " + this.result)
+                this.operator = input;
+                this.numberTwo = new String("");
+            }
+        } else{
+            if(!this.hasAnOperator()){
+                this.result += input;
+            } else{
+                this.numberTwo += input;
+            }
+        }
+        this.previousEntry = input;
+    }
+    calc(){
+        switch (this.operator){
             case "+":
                 this.addition();
                 break;
@@ -135,53 +181,78 @@ class TheOperations{
             case "X":
                 this.multiplication();
                 break;
-            case "-":
-                this.subtraction();
+            case "÷":
+                this.division();
+                break;
+            default:
+                console.log("Operator Error");
+                this.result = "0";
                 break;
         }
     }
+    equals(){
+        if(isNaN(parseFloat(this.previousEntry))){
+            this.calc();
+        }
+        else{
+            this.numberTwo = this.previousEntry;
+            this.calc();
+        }
+        this.numberTwo = new String("0");
+        return this.result;
+    }
+    clear(){
+        this.numberTwo = new String("");
+        this.result = new String("");
+        this.operator = new String("");
+        this.previousEntry = new String("");
+    }
     addition(){
-        return this.#numberOne + this.#numberTwo
+        this.result = (parseFloat(this.result ) + parseFloat(this.numberTwo)).toString();
     }
     subtraction(){
-        return this.#numberOne - this.#numberTwo;
+        this.result = (parseFloat(this.result ) - parseFloat(this.numberTwo)).toString();
     }
     multiplication(){
-        return this.#numberOne*this.#numberTwo;
+        this.result = (parseFloat(this.result ) * parseFloat(this.numberTwo)).toString();
     }
     division(){
-        if (this.#numberTwo === 0){
-            return `can not divide by zero`
+        if (parseFloat(this.numberTwo) === 0){
+            window.alert( `can not divide by zero`)
         } else{
-        return this.#numberOne/this.#numberTwo;
+            this.result = (parseFloat(this.result ) / parseFloat(this.numberTwo)).toString();
         }
     }
-
 }
 class Display{
-    inputAry;
+    inputString;
     screenNode;
     active;
     powerDisplay;
 
     constructor(screenNode) {
         this.screenNode = screenNode;
-        this.inputAry = new Array();   
+        this.inputString = new String();   
         this.active = true;
         this.powerDisplay = document.querySelector(".onOrAff");
     }
     clearInput(){
-        this.inputAry.length = 0; 
+        this.inputString = ""; 
         this.showInput();  
     }
     addInput(value){
         if(this.active){
-            this.inputAry.push(value);
+            this.inputString += value;
             this.showInput();
         }
     }
+    answer(theResult){
+        this.clearInput();
+        this.inputString = new String(theResult);
+        this.showInput();
+    }
     showInput(){
-            this.screenNode.textContent = this.inputAry.toString().replaceAll(",","");
+            this.screenNode.textContent = this.inputString;
         }
     turnOff(){
         this.clearInput();
