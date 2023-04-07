@@ -146,7 +146,7 @@ class TheOperations{
         return this.result.length > 0;
     }
     lastEntryWasOp(){
-        return isNaN(parseFloat(this.previousEntry));
+        return (isNaN(parseFloat(this.previousEntry)) && this.previousEntry != "=");
     }
     onKeyPress(input){
         if(isNaN(parseFloat(input))){
@@ -191,14 +191,16 @@ class TheOperations{
         }
     }
     equals(){
-        if(isNaN(parseFloat(this.previousEntry))){
+        if(this.lastEntryWasOp()){
             this.calc();
         }
         else{
             this.numberTwo = this.previousEntry;
             this.calc();
         }
-        this.numberTwo = new String("0");
+        this.previousEntry = "=";
+        this.numberTwo = new String("");
+        this.operator = new String("");
         return this.result;
     }
     clear(){
