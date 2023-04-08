@@ -256,19 +256,19 @@ class TheOperations{
         this.previousEntry = new String("");
     }
     addition(){
-        this.result = (parseFloat(this.result ) + parseFloat(this.numberTwo)).toString();
+        this.result = (parseFloat(this.result ) + parseFloat(this.numberTwo)).toFixed(2);
     }
     subtraction(){
-        this.result = (parseFloat(this.result ) - parseFloat(this.numberTwo)).toString();
+        this.result = (parseFloat(this.result ) - parseFloat(this.numberTwo)).toFixed(2);
     }
     multiplication(){
-        this.result = (parseFloat(this.result ) * parseFloat(this.numberTwo)).toString();
+        this.result = (parseFloat(this.result ) * parseFloat(this.numberTwo)).toFixed(2);
     }
     division(){
-        if (parseFloat(this.numberTwo) === 0){
+        if (this.numberTwo.length == 0){
             window.alert( `can not divide by zero`)
         } else{
-            this.result = (parseFloat(this.result ) / parseFloat(this.numberTwo)).toString();
+            this.result = (parseFloat(this.result ) / parseFloat(this.numberTwo)).toFixed(2);
         }
     }
 }
