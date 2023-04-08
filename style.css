@@ -58,7 +58,7 @@
     color: #cd61e5;
     text-align: center;
     padding: 2%;
-    font-size: large;    
+    font-size: larger;    
     letter-spacing: 2px;
     margin: 0px;
 }
@@ -90,7 +90,7 @@
     border-radius: 0%;
 }   
 .longerButton:hover{
-    background-color: darkolivegreen;
+    background-color: #1F51FF;
 }
 .opButtons{
     font-size: larger;
@@ -105,4 +105,20 @@
     background-color: #5D865F;
     min-height: 5px;
     width: 100px
+}
+.onButton:hover{
+    background-color: #39FF14;
+    color: #000000;
+}
+.offButton:hover{
+    background-color: #FF5F1F;
+    color:#000000;
+}
+.piButton:hover{
+    background-color: #314159;
+    color: #fb48a1;
+    font-weight: bolder;
+}
+.clearButton:hover{
+    background-color: #FF3131;
 }

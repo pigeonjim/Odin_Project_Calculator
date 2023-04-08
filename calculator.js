@@ -41,23 +41,27 @@ function addTheButtons(operate, aDisplay){
         buttonDiv.appendChild(longerButton2);
         if(i == 1){
             longerButton1.textContent = "Clear";
+            longerButton1.classList.add("clearButton"); 
             buttonMap.set("Clear", longerButton1);
             longerButton1.addEventListener("click", function(){
                 aDisplay.clearInput();
                 operate.clear();
              })
             longerButton2.textContent = "On";
+            longerButton2.classList.add("onButton");
             longerButton2.addEventListener("click", (event) => aDisplay.turnOn())
             buttonMap.set("On", longerButton2);
         } else{
-            longerButton1.textContent = "π";            
+            longerButton1.textContent = "π";  
+            longerButton1.classList.add("piButton");         
             longerButton1.addEventListener("click", function(){
                 if(operate.inputSpecial(Math.PI.toFixed(4))){
                     aDisplay.addInput(Math.PI.toFixed(4));
                 }
             })
             buttonMap.set("Pi", longerButton1);
-            longerButton2.textContent = "off"
+            longerButton2.textContent = "Off";
+            longerButton2.classList.add("offButton");
             buttonMap.set("Off", longerButton2);
             longerButton2.addEventListener("click", (event) => aDisplay.turnOff());
         }
