@@ -122,3 +122,33 @@
 .clearButton:hover{
     background-color: #FF3131;
 }
+.buttons:active{
+    background-color: #6d6eae70;
+    transform: translateY(2px);
+    color: #000000;
+    box-shadow: 5px 5px 5px #000000;
+}
+.onButton:active{
+    background-color: #37ff1470;
+    transform: translateY(2px);
+    color: #000000;
+    box-shadow: 5px 5px 5px #314159;
+}
+.offButton:active{
+    background-color: #ff5f1f82;
+    transform: translateY(2px);
+    color: #000000;
+    box-shadow: 5px 5px 5px #314159;
+}
+.clearButton:active{
+    background-color: #ff313181;
+    transform: translateY(2px);
+    color: #000000;
+    box-shadow: 5px 5px 5px #314159;
+}
+.opButtons:active{
+    background-color: #f0e00153;
+    transform: translateY(2px);
+    color: #000000;
+    box-shadow: 5px 5px 5px #314159;
+}

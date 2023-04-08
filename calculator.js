@@ -72,14 +72,24 @@ function addTheButtons(operate, aDisplay){
         if(i % 5 == 0 || (i + 1) % 5 == 0) {
             theButton.classList = "buttons longerButton opButtons";
             operatorButtons(i, theButton);
-            theButton.addEventListener("click", function(){                
-                if(!(operate.lastEntryWasOp())){
-                    operate.onKeyPress(theButton.textContent);
-                    aDisplay.addInput(theButton.textContent);   
-                } else{
-                    window.alert("You can not use two operators in a row");
-                }
-            })
+            const standardCalcs = ["+", "-","X","÷"];
+            if(standardCalcs.includes(theButton.textContent)){
+                theButton.addEventListener("click", function(){                
+                    if(!(operate.lastEntryWasOp())){
+                        operate.onKeyPress(theButton.textContent);
+                        aDisplay.addInput(theButton.textContent);   
+                    } else{
+                        window.alert("You can not use two operators in a row");
+                    }
+                })
+            }else {
+                theButton.addEventListener("click", function(){                
+                    if(!(operate.lastEntryWasOp())){
+                        aDisplay.clearInput();                    
+                        aDisplay.addInput(operate.calc(theButton.textContent));   
+                    }
+                })
+             }
             buttonMap.set(`OpB${i}`, theButton);
              } else{
             theButton.classList = "buttons";
@@ -95,14 +105,14 @@ function addTheButtons(operate, aDisplay){
              } else {
                 switch (count){
                     case -1:
-                        theButton.textContent = "="
+                        theButton.textContent = "=";
                         theButton.addEventListener("click", function(){
                             let theAnswer = operate.equals();
                             aDisplay.answer(theAnswer);
                         })
                         break;
                     case -2:
-                        theButton.textContent = "."
+                        theButton.textContent = ".";
                         theButton.addEventListener("click", function(){
                             if(operate.inputSpecial(".")){
                                 aDisplay.addInput(".");
@@ -135,7 +145,7 @@ function operatorButtons(aNumber, aButton){
             aButton.textContent= "-";
             break;
         case 15:
-            aButton.textContent = "MOD";
+            aButton.textContent = "10^x";
             break; 
         case 19:
             aButton.textContent = "+";
@@ -144,7 +154,6 @@ function operatorButtons(aNumber, aButton){
             aButton.textContent = "1/X";
             break; 
     }
-
 }
 class TheOperations{
     numberTwo;
@@ -181,9 +190,7 @@ class TheOperations{
             } else if(!(this.hasAnOperator())){
                 this.operator += input;
             }else{
-                console.log(this.result)
                 this.calc();
-                console.log("after " + this.result)
                 this.operator = input;
                 this.numberTwo = new String("");
             }
@@ -222,10 +229,10 @@ class TheOperations{
             }
         }
     }
-    calc(){
+    calc(anOp = this.operator){
         this.result = this.removeLeadingZero(this.result);
         this.numberTwo = this.removeLeadingZero(this.numberTwo);
-        switch (this.operator){
+        switch (anOp){
             case "+":
                 this.addition();
                 break;
@@ -238,19 +245,30 @@ class TheOperations{
             case "÷":
                 this.division();
                 break;
+            case "√":
+                this.sqlRt();
+                return this.result;
+            case "X^2":
+                this.sqIt();
+                return this.result;
+            case "10^x":
+                this.tenUp();
+                return this.result;
+            case "1/X":
+                this.reciprocal();
+                return this.result;
             default:
                 console.log("Operator Error");
                 this.result = "0";
                 break;
         }
+        return this.result;
     }
     equals(){
-        if(!(this.lastEntryWasOp())){
+        if(!(this.lastEntryWasOp()) && this.previousEntry !="="){
             this.calc();
         }
-        this.previousEntry = "=";
-        this.numberTwo = new String("");
-        this.operator = new String("");
+        this.specialOpReset();
         return this.result;
     }
     removeLeadingZero(aString){
@@ -266,20 +284,57 @@ class TheOperations{
         this.previousEntry = new String("");
     }
     addition(){
-        this.result = (parseFloat(this.result ) + parseFloat(this.numberTwo)).toFixed(2);
+        this.result = (parseFloat(this.result) + parseFloat(this.numberTwo)).toFixed(2);
     }
     subtraction(){
-        this.result = (parseFloat(this.result ) - parseFloat(this.numberTwo)).toFixed(2);
+        this.result = (parseFloat(this.result) - parseFloat(this.numberTwo)).toFixed(2);
     }
     multiplication(){
-        this.result = (parseFloat(this.result ) * parseFloat(this.numberTwo)).toFixed(2);
+        this.result = (parseFloat(this.result) * parseFloat(this.numberTwo)).toFixed(2);
     }
     division(){
         if (this.numberTwo.length == 0){
             window.alert( `can not divide by zero`)
         } else{
-            this.result = (parseFloat(this.result ) / parseFloat(this.numberTwo)).toFixed(2);
+            this.result = (parseFloat(this.result) / parseFloat(this.numberTwo)).toFixed(2);
         }
+    }
+    sqlRt(){
+        if(this.result.length > 0){
+            this.result = Math.sqrt(this.result).toFixed(2);
+        } else if(this.numberTwo > 0){
+            this.result = Math.sqrt(this.numberTwo).toFixed(2);
+        }
+        this.specialOpReset();
+    }
+    sqIt(){
+        if(this.result.length > 0){
+            this.result = Math.pow(this.result,2).toFixed(2);
+        } else if(this.numberTwo > 0){
+            this.result = Math.pow(this.numberTwo,2).toFixed(2);
+        }
+        this.specialOpReset();
+    }
+    tenUp(){
+        if(this.result.length > 0){
+            this.result = Math.pow(10,this.result).toString();
+        } else if(this.numberTwo > 0){
+            this.result = Math.pow(10,this.numberTwo).toString();
+        }
+        this.specialOpReset();
+    }
+    reciprocal(){
+        if(this.result.length > 0){
+            this.result = Math.pow(this.result,-1).toString();
+        } else if(this.numberTwo > 0){
+            this.result = Math.pow(this.numberTwo,-1).toString();
+        }
+        this.specialOpReset();
+    }
+    specialOpReset(){
+        this.numberTwo = new String("");
+        this.operator = new String("");
+        this.previousEntry = "=";
     }
 }
 class Display{
@@ -323,5 +378,4 @@ class Display{
         this.screenNode.style.setProperty("background-color","#000000");
         this.powerDisplay.style.setProperty("background-color","#5D865F")
     }
-
 }
