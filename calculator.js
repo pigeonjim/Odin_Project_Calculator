@@ -24,6 +24,7 @@ function onLoad(){
 }
 
 function addTheButtons(operate, aDisplay){
+    
     const calcDiv = document.querySelector(".calcBase")
     const buttonDiv= document.createElement("div");
     buttonDiv.classList = "buttonDiv";
@@ -78,6 +79,9 @@ function addTheButtons(operate, aDisplay){
             if(count >= 0){
                 theButton.textContent = count.toString();
                 theButton.addEventListener("click", function(){
+                    if(operate.lastEntryWasEquals()){
+                        aDisplay.clearInput();
+                    }
                     operate.onKeyPress(theButton.textContent);
                     aDisplay.addInput(theButton.textContent);
                 })
@@ -92,6 +96,11 @@ function addTheButtons(operate, aDisplay){
                         break;
                     case -2:
                         theButton.textContent = "."
+                        theButton.addEventListener("click", function(){
+                            if(operate.decimalPlace()){
+                                aDisplay.addInput(".");
+                            }
+                        })
                         break;
                 }                
             }    
@@ -135,9 +144,14 @@ class TheOperations{
     operator;
     result;
     previousEntry;
+    opAry;
     
     constructor(){
         this.clear();
+        this.opAry = ["+","-","X","÷","X^2","MOD","√","1/X"]
+    }
+    get opAry(){
+        return this.opAry;
     }
     hasAnOperator(){
         return this.operator.length > 0;
@@ -148,10 +162,15 @@ class TheOperations{
     lastEntryWasOp(){
         return (isNaN(parseFloat(this.previousEntry)) && this.previousEntry != "=");
     }
+    lastEntryWasEquals(){
+        return ( this.previousEntry === "=");
+    }
     onKeyPress(input){
         if(isNaN(parseFloat(input))){
             if (!(this.hasFirstNumber())){
                 window.alert("Please enter a number first");
+            }else if(!(this.opAry.includes(input))){
+                window.alert("Not a valid operator")
             } else if(!(this.hasAnOperator())){
                 this.operator += input;
             }else{
@@ -162,7 +181,10 @@ class TheOperations{
                 this.numberTwo = new String("");
             }
         } else{
-            if(!this.hasAnOperator()){
+            if(this.previousEntry === "="){
+                this.clear();
+                this.result += input;
+            }else if(!this.hasAnOperator()){
                 this.result += input;
             } else{
                 this.numberTwo += input;
@@ -170,7 +192,29 @@ class TheOperations{
         }
         this.previousEntry = input;
     }
+    decimalPlace(){
+        if(!this.hasAnOperator()){
+            if(!(this.result.includes(".")) || this.result.length == 0){
+                this.result += ".";
+                return true;
+            } else{
+                window.alert("A number can only have one full stop");
+                return false;
+            }
+
+        } else{
+            if(!(this.numberTwo.includes(".")) || this.result.length == 0){
+                this.numberTwo += ".";
+                return true;
+            } else{                
+                window.alert("A number can only have one full stop");
+                return false;
+            }
+        }
+    }
     calc(){
+        this.result = this.removeLeadingZero(this.result);
+        this.numberTwo = this.removeLeadingZero(this.numberTwo);
         switch (this.operator){
             case "+":
                 this.addition();
@@ -191,17 +235,19 @@ class TheOperations{
         }
     }
     equals(){
-        if(this.lastEntryWasOp()){
-            this.calc();
-        }
-        else{
-            this.numberTwo = this.previousEntry;
+        if(!(this.lastEntryWasOp())){
             this.calc();
         }
         this.previousEntry = "=";
         this.numberTwo = new String("");
         this.operator = new String("");
         return this.result;
+    }
+    removeLeadingZero(aString){
+        if(aString[0] === "0"){
+            return aString.substring(1);
+        }
+        return aString;
     }
     clear(){
         this.numberTwo = new String("");
