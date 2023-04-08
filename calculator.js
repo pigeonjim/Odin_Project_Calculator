@@ -50,12 +50,13 @@ function addTheButtons(operate, aDisplay){
             longerButton2.addEventListener("click", (event) => aDisplay.turnOn())
             buttonMap.set("On", longerButton2);
         } else{
-            longerButton1.textContent = "π";
+            longerButton1.textContent = "π";            
+            longerButton1.addEventListener("click", function(){
+                if(operate.inputSpecial(Math.PI.toFixed(4))){
+                    aDisplay.addInput(Math.PI.toFixed(4));
+                }
+            })
             buttonMap.set("Pi", longerButton1);
-            longerButton1.addEventListener("click", () => {
-                operate.onKeyPress(Math.PI);
-                aDisplay.addInput(Math.PI);                                
-        })
             longerButton2.textContent = "off"
             buttonMap.set("Off", longerButton2);
             longerButton2.addEventListener("click", (event) => aDisplay.turnOff());
@@ -87,7 +88,7 @@ function addTheButtons(operate, aDisplay){
                     operate.onKeyPress(theButton.textContent);
                     aDisplay.addInput(theButton.textContent);
                 })
-            } else {
+             } else {
                 switch (count){
                     case -1:
                         theButton.textContent = "="
@@ -99,7 +100,7 @@ function addTheButtons(operate, aDisplay){
                     case -2:
                         theButton.textContent = "."
                         theButton.addEventListener("click", function(){
-                            if(operate.decimalPlace()){
+                            if(operate.inputSpecial(".")){
                                 aDisplay.addInput(".");
                             }
                         })
@@ -194,23 +195,26 @@ class TheOperations{
         }
         this.previousEntry = input;
     }
-    decimalPlace(){
+    inputSpecial(anInput){
         if(!this.hasAnOperator()){
-            if(!(this.result.includes(".")) || this.result.length == 0){
-                this.result += ".";
+            if((!(this.result.includes(".")) || this.result.length == 0) && anInput === "."){
+                this.result += anInput;
+                this.previousEntry = "1"
                 return true;
-            } else{
-                window.alert("A number can only have one full stop");
-                return false;
+            } else if(!(this.result.includes(".")) && this.result.length == 0){
+                this.result += anInput;
+                this.previousEntry = "1"
+                return true;
             }
-
         } else{
-            if(!(this.numberTwo.includes(".")) || this.result.length == 0){
-                this.numberTwo += ".";
+            if((!(this.numberTwo.includes(".")) || this.numberTwo.length == 0) && anInput === "."){
+                this.numberTwo += anInput;
+                this.previousEntry = "1"
                 return true;
-            } else{                
-                window.alert("A number can only have one full stop");
-                return false;
+            } else if(!(this.numberTwo.includes(".")) && this.numberTwo.length == 0){
+                this.numberTwo += anInput;
+                this.previousEntry = "1"
+                return true;
             }
         }
     }
