@@ -52,7 +52,10 @@ function addTheButtons(operate, aDisplay){
         } else{
             longerButton1.textContent = "π";
             buttonMap.set("Pi", longerButton1);
-            longerButton1.addEventListener("click", (event) => aDisplay.addInput("π"));
+            longerButton1.addEventListener("click", () => {
+                operate.onKeyPress(Math.PI);
+                aDisplay.addInput(Math.PI);                                
+        })
             longerButton2.textContent = "off"
             buttonMap.set("Off", longerButton2);
             longerButton2.addEventListener("click", (event) => aDisplay.turnOff());
@@ -64,8 +67,7 @@ function addTheButtons(operate, aDisplay){
         if(i % 5 == 0 || (i + 1) % 5 == 0) {
             theButton.classList = "buttons longerButton opButtons";
             operatorButtons(i, theButton);
-            theButton.addEventListener("click", function(){
-                
+            theButton.addEventListener("click", function(){                
                 if(!(operate.lastEntryWasOp())){
                     operate.onKeyPress(theButton.textContent);
                     aDisplay.addInput(theButton.textContent);   
