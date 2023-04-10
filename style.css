@@ -61,6 +61,9 @@
     font-size: larger;    
     letter-spacing: 2px;
     margin: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .buttonDiv{
     display: grid;
